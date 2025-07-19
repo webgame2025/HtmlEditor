@@ -4,11 +4,11 @@
   <meta charset="UTF-8">
   <title>Android Web Code Editor</title>
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
+  
   <!-- PWA Support -->
   <link rel="manifest" href="manifest.json">
   <meta name="theme-color" content="#00f2fe">
-  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/5968/5968267.png">
+  <link rel="icon" href="https://cdn-icons-png.flaticon.com/512/919/919827.png">
 
   <style>
     * { box-sizing: border-box; }
@@ -115,7 +115,6 @@
       display: block;
     }
 
-    /* Install Button (only shown if eligible) */
     #install-btn {
       position: fixed;
       bottom: 20px;
@@ -195,8 +194,7 @@
       </html>
     `;
 
-    const iframe = document.getElementById('preview');
-    iframe.srcdoc = output;
+    document.getElementById('preview').srcdoc = output;
   }
 
   function downloadCode() {
@@ -204,33 +202,28 @@
     const css = document.getElementById('css-code').value;
     const js = document.getElementById('js-code').value;
 
-    const fullHTML = `
+    const blob = new Blob([`
 <!DOCTYPE html>
 <html>
-<head>
-  <style>${css}</style>
-</head>
+<head><style>${css}</style></head>
 <body>
-  ${html}
-  <script>${js}<\/script>
+${html}
+<script>${js}<\/script>
 </body>
-</html>`;
+</html>`], { type: 'text/html' });
 
-    const blob = new Blob([fullHTML], { type: 'text/html' });
     const a = document.createElement('a');
     a.href = URL.createObjectURL(blob);
     a.download = 'webpage.html';
     a.click();
   }
 
-  // Register Service Worker
   if ('serviceWorker' in navigator) {
     window.addEventListener('load', () => {
       navigator.serviceWorker.register('sw.js');
     });
   }
 
-  // Install button
   let deferredPrompt;
   const installBtn = document.getElementById('install-btn');
 
