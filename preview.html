@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Preview</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <style>
+    body, html {
+      margin: 0;
+      padding: 0;
+      height: 100%;
+    }
+    iframe {
+      width: 100%;
+      height: 100%;
+      border: none;
+    }
+    button.back-btn {
+      position: fixed;
+      top: 10px;
+      left: 10px;
+      z-index: 10;
+      background: #00f2fe;
+      color: #000;
+      border: none;
+      padding: 10px 15px;
+      font-size: 16px;
+      border-radius: 8px;
+      box-shadow: 0 0 10px #00f2fe;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<button class="back-btn" onclick="history.back()">← Back</button>
+<iframe id="preview-frame" sandbox="allow-scripts allow-same-origin"></iframe>
+
+<script>
+  const html = localStorage.getItem('code-html') || '';
+  const css = localStorage.getItem('code-css') || '';
+  const js = localStorage.getItem('code-js') || '';
+
+  const output = `
+    <!DOCTYPE html>
+    <html>
+    <head><style>${css}</style></head>
+    <body>
+      ${html}
+      <script>
+        try {
+          ${js}
+        } catch (e) {
+          document.body.innerHTML += '<pre style="color:red;">' + e + '</pre>';
+        }
+      <\/script>
+    </body>
+    </html>
+  `;
+
+  document.getElementById('preview-frame').srcdoc = output;
+</script>
+
+</body>
+</html>
